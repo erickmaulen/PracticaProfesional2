@@ -66,7 +66,7 @@ video.release()
 # Se abre el video
 cap = cv2.VideoCapture("Ms-Pacman-v0.wmv")
 
-# Seleccion random de 25 frames
+# Seleccion random de 100 frames
 frameIds = cap.get(cv2.CAP_PROP_FRAME_COUNT) * np.random.uniform(size=100)
 
 frames = []
@@ -79,8 +79,8 @@ for fid in frameIds:
 medianFrame = np.median(frames, axis=0).astype(dtype=np.uint8)
 
 # Muestra el fondo del videojuego (estatico)
-cv2.imshow('Fondo', medianFrame)
-cv2.waitKey(20)
+#cv2.imshow('Fondo', medianFrame)
+#cv2.waitKey(20)
 #cv2.destroyAllWindows()
 
 cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
