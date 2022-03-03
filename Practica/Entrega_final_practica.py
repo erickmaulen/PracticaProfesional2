@@ -14,19 +14,19 @@ params.maxThreshold = 200
 
 # Filtrar por Area
 params.filterByArea = True
-params.minArea = 0.5
+params.minArea = 0.03
 
 # Filtrar por circularidad
 params.filterByCircularity = True
-params.minCircularity = 0.7
+params.minCircularity = 0.02
 
 # Filtrar por convexidad
 params.filterByConvexity = True
-params.minConvexity = 0.5
+params.minConvexity = 0.35
 
 # Filtrar por relacion de inercia
 params.filterByInertia = True
-params.minInertiaRatio = 0.087
+params.minInertiaRatio = 0.009
 
 # Se crea el detector coon los parametros
 ver = (cv2.__version__).split('.')
@@ -42,20 +42,20 @@ done = False
 step = 0
 
 env.reset()
-while not done and step < 1000:
+while not done and step < 10000000:
     action = env.action_space.sample()
     state_next, reward, done, info = env.step(action)
     image = state_next
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
     images.append(image)
 
 #Aca se obtiene el alto y ancho debido a que se debera recortar la imagen final
 height, width = state_next.shape[0:2]
-video = cv2.VideoWriter('Ms-Pacman-v0.wmv',cv2.VideoWriter_fourcc(*'mp4v'),25,(width,height-40))
+video = cv2.VideoWriter('Ms-Pacman-v0.wmv',cv2.VideoWriter_fourcc(*'mp4v'),100,(width,height-40))
 
 #La idea de este video es que muestre como hace tracking a los diferentes objetos que tiene el juego Pacman
-videoblob = cv2.VideoWriter('Ms-Pacman-v0Blob.wmv',cv2.VideoWriter_fourcc(*'mp4v'),25,(width,height-40))
+videoblob = cv2.VideoWriter('Ms-Pacman-v0Blob.wmv',cv2.VideoWriter_fourcc(*'mp4v'),50,(width,height-40))
 
 for i in range(len(images)):
     video.write(images[i][0:height-40,0:width])
@@ -67,7 +67,7 @@ video.release()
 cap = cv2.VideoCapture("Ms-Pacman-v0.wmv")
 
 # Seleccion random de 25 frames
-frameIds = cap.get(cv2.CAP_PROP_FRAME_COUNT) * np.random.uniform(size=25)
+frameIds = cap.get(cv2.CAP_PROP_FRAME_COUNT) * np.random.uniform(size=100)
 
 frames = []
 for fid in frameIds:
@@ -107,7 +107,7 @@ while(ret):
   # Se calcula la diferencia entre el frame actual y la media(fondo)
   dframe = cv2.absdiff(frame, grayMedianFrame)
   # Treshold a binario
-  th, dframe = cv2.threshold(dframe, 30, 255, cv2.THRESH_BINARY)
+  th, dframe = cv2.threshold(dframe, 50, 255, cv2.THRESH_BINARY)
   
   #Deteccion de objetos
   mask = object_detector.apply(dframe)
